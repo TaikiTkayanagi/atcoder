@@ -1,8 +1,5 @@
 package com.example.contest419;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class C {
