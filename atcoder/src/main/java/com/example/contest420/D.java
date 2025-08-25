@@ -1,30 +1,17 @@
 package com.example.contest420;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class D {
-    private static class QueueNode {
-        public int[] info;
-        public String[][] table;
-
-        public QueueNode(int[] info, String[][] table) {
-            this.info = info;
-            this.table = table;
-        }
-    }
-
     public static void main(String[] args) {
         var sc = new Scanner(System.in);
 
         var h = sc.nextInt();
         var w = sc.nextInt();
 
-        int[] start = new int[3];
+        int[] start = new int[4];
         var table = new String[h][w];
-        HashMap<String, ArrayList<int[]>> memo = new HashMap<>();
         for (int i = 0; i < h; i++) {
             var a = sc.next().split("");
             for (int j = 0; j < w; j++) {
@@ -33,73 +20,50 @@ public class D {
                     start[0] = i;
                     start[1] = j;
                     start[2] = 0;
-                } else if (a[j].equals("o")) {
-                    int[] add = { i, j };
-                    if (memo.containsKey(a[j])) {
-                        memo.get(a[j]).add(add);
-                    } else {
-                        var array = new ArrayList<int[]>();
-                        array.add(add);
-                        memo.put(a[j], array);
-                    }
-                } else if (a[j].equals("x")) {
-                    int[] add = { i, j };
-                    if (memo.containsKey(a[j])) {
-                        memo.get(a[j]).add(add);
-                    } else {
-                        var array = new ArrayList<int[]>();
-                        array.add(add);
-                        memo.put(a[j], array);
-                    }
+                    start[3] = 0;
                 }
             }
         }
 
-        var queue = new ArrayDeque<QueueNode>();
-        queue.add(new QueueNode(start, table.clone()));
+        var queue = new ArrayDeque<int[]>();
+        queue.add(start);
+        int[] distRow = { 0, 0, -1, 1 };
+        int[] distCol = { -1, 1, 0, 0 };
+        int[][][] memo = new int[2][h][w];
+        var result = -1;
         while (!queue.isEmpty()) {
-            var node = queue.poll();
-            var position = node.info;
-            int row = position[0];
-            int col = position[1];
-            int count = position[2];
-            var virtualTable = node.table;
+            var poll = queue.poll();
+            int row = poll[0];
+            int col = poll[1];
+            int count = poll[2];
+            int onOrOff = poll[3];
 
-            if (virtualTable[row][col].equals("G")) {
-                System.out.println(count);
+            if (table[row][col].equals("G")) {
+                result = count;
                 break;
-            } else if (virtualTable[row][col].equals("?")) {
+            } else if (table[row][col].equals("?")) {
+                onOrOff ^= 1;
+            }
 
-                var openList = memo.get("o");
-                var closeList = memo.get("x");
-                virtualTable = virtualTable.clone();
-                for (int[] value : openList) {
-                    virtualTable[value[0]][value[1]] = "x";
+            for (int i = 0; i < 4; i++) {
+                int nextRow = row + distRow[i];
+                int nextCol = col + distCol[i];
+                if (nextRow >= h || nextRow < 0 || nextCol >= w || nextCol < 0) {
+                    continue;
                 }
-                for (int[] value : closeList) {
-                    virtualTable[value[0]][value[1]] = "o";
+                String notPass = onOrOff == 0 ? "x" : "o";
+                if (table[nextRow][nextCol].equals(notPass) || table[nextRow][nextCol].equals("#")) {
+                    continue;
                 }
-            }
-
-            if (row + 1 < h && !virtualTable[row + 1][col].equals("x") && !virtualTable[row + 1][col].equals("#")) {
-                int[] add = { row + 1, col, count + 1 };
-                queue.addLast(new QueueNode(add, virtualTable));
-            }
-
-            if (row - 1 >= 0 && !virtualTable[row - 1][col].equals("x") && !virtualTable[row - 1][col].equals("#")) {
-                int[] add = { row - 1, col, count + 1 };
-                queue.addLast(new QueueNode(add, virtualTable));
-            }
-
-            if (col + 1 < w && !virtualTable[row][col + 1].equals("x") && !virtualTable[row][col + 1].equals("#")) {
-                int[] add = { row, col + 1, count + 1 };
-                queue.addLast(new QueueNode(add, virtualTable));
-            }
-
-            if (col - 1 >= 0 && !virtualTable[row][col - 1].equals("x") && !virtualTable[row][col - 1].equals("#")) {
-                int[] add = { row, col - 1, count + 1 };
-                queue.addLast(new QueueNode(add, virtualTable));
+                if (memo[onOrOff][nextRow][nextCol] != 0) {
+                    continue;
+                }
+                int[] add = { nextRow, nextCol, count + 1, onOrOff };
+                queue.addLast(add);
+                memo[onOrOff][nextRow][nextCol]++;
             }
         }
+        System.out.println(result);
+        sc.close();
     }
 }

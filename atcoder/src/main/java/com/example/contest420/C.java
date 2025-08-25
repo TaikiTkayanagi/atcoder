@@ -45,5 +45,6 @@ public class C {
             total = total - before + after;
             System.out.println(total);
         }
+        sc.close();
     }
 }

@@ -12,5 +12,7 @@ public class A {
         var ans = (x + y) % 12;
 
         System.out.println(ans == 0 ? "12" : ans);
+
+        sc.close();
     }
 }

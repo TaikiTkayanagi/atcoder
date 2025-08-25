@@ -24,10 +24,8 @@ public class B {
         for (int i = 0; i < m; i++) {
             var zeroList = new ArrayList<Integer>();
             var oneList = new ArrayList<Integer>();
-            int[] count = new int[2];
             for (int j = 0; j < n; j++) {
                 var vote = votes[j][i];
-                count[vote]++;
                 if (vote == 1) {
                     oneList.add(j);
                 } else {
@@ -51,18 +49,11 @@ public class B {
             }
         }
 
-        var result = new ArrayList<Integer>();
         for (int i = 0; i < n; i++) {
             if (total[i] == max) {
-                result.add(i + 1);
+                System.out.print(i + 1 + " ");
             }
         }
-
-        for (int i = 0; i < result.size(); i++) {
-            System.out.print(result.get(i));
-            if (i + 1 != result.size()) {
-                System.out.print(" ");
-            }
-        }
+        sc.close();
     }
 }
