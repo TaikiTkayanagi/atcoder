@@ -3,12 +3,11 @@ package com.example.contest427;
 import java.util.Scanner;
 
 public class B {
-    private static int f(int i) {
-        var r = 0;
-        double iterator = (double) i;
-        while (iterator >= 1) {
-            r += iterator % 10;
-            iterator /= 10;
+    private static long f(int i) {
+        long r = 0L;
+        while (i > 0) {
+            r += i % 10;
+            i /= 10;
         }
         return r;
     }
@@ -18,10 +17,7 @@ public class B {
         var count = sc.nextInt();
 
         var r = 1;
-        for (int i = 0; i < count; i++) {
-            if (i == 0) {
-                continue;
-            }
+        for (int i = 1; i < count; i++) {
             r += f(r);
         }
         System.out.println(r);
