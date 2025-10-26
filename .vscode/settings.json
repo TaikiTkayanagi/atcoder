@@ -5,6 +5,7 @@
     },
     "github.copilot.enable": {
         "java": false,
+        "python": false
     },
-    "java.jdt.ls.java.home": "/usr/lib/jvm/msopenjdk-current"
+    "java.jdt.ls.java.home": "/usr/local/sdkman/candidates/java/current/"
 }
